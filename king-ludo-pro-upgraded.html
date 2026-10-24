@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#10172a">
+<title>King Ludo PRO</title>
+<style>
+:root{--bg:#10172a;--card:#1c2740;--gold:#ffd21f;--muted:#b9c5db;--red:#f04444;--green:#22c55e;--yellow:#facc15;--blue:#3b82f6}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top,#202d4b 0,#10172a 48%);color:#fff;font-family:system-ui,-apple-system,"Noto Sans Devanagari",sans-serif;min-height:100vh}
+.wrap{max-width:760px;margin:auto;padding:18px 12px 30px}.hero{text-align:center;padding:8px 4px 16px}.crown{font-size:34px}.hero h1{margin:2px 0;color:var(--gold);font-size:clamp(27px,7vw,42px);line-height:1.15;letter-spacing:.5px}.tag{margin:8px 0;color:#d5def0;font-size:15px}.badge{display:inline-block;border:1px solid #465775;background:#1c2740;color:#dce6f7;padding:5px 10px;border-radius:99px;font-size:12px}
+.card{background:rgba(28,39,64,.92);border:1px solid #33425f;border-radius:18px;padding:14px;margin:12px 0;box-shadow:0 10px 28px #0002}.controls{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap}.controls label{font-weight:700;color:#e8edf7}select,button{font:inherit}select{background:#f7f8fc;color:#111827;border:0;border-radius:12px;padding:11px 12px;max-width:100%}
+.board-wrap{padding:8px;background:#f8fafc;border-radius:14px;box-shadow:0 8px 25px #0003}.board{width:100%;aspect-ratio:1;display:grid;grid-template-columns:repeat(15,1fr);grid-template-rows:repeat(15,1fr);border:2px solid #cbd5e1;overflow:hidden;background:white}.cell{border:1px solid #d5dbe5;display:flex;align-items:center;justify-content:center;position:relative;min-width:0;min-height:0;font-size:clamp(8px,2vw,15px)}.home-red{background:#fca5a5}.home-green{background:#86efac}.home-yellow{background:#fde047}.home-blue{background:#93c5fd}.track{background:#fff}.safe{background:#dbeafe!important}.lane-red{background:#f87171}.lane-green{background:#4ade80}.lane-yellow{background:#facc15}.lane-blue{background:#60a5fa}.center{background:conic-gradient(var(--green) 0 25%,var(--yellow) 0 50%,var(--blue) 0 75%,var(--red) 0)!important}.yard{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:8%;padding:12%;width:100%;height:100%}.yard span{border-radius:50%;border:2px solid #fff;background:#ffffffd9;box-shadow:0 1px 4px #0003}.token{position:absolute;width:78%;height:78%;border-radius:50%;border:2px solid #fff;box-shadow:0 2px 5px #0005;display:flex;align-items:center;justify-content:center;color:white;font-size:clamp(8px,2.2vw,15px);font-weight:900;z-index:3;cursor:pointer;text-shadow:0 1px 2px #0008}.token.red{background:var(--red)}.token.green{background:var(--green)}.token.yellow{background:#eab308}.token.blue{background:var(--blue)}.token.selectable{outline:3px solid var(--gold);outline-offset:1px;animation:pulse .8s infinite alternate}.token.stack{width:90%;height:90%}@keyframes pulse{from{transform:scale(.88)}to{transform:scale(1.06)}}
+.status{text-align:center;font-weight:800;color:var(--gold);font-size:18px;min-height:30px;margin:10px 0}.dice-area{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap}.dice{font-size:62px;line-height:1;filter:drop-shadow(0 5px 5px #0003);min-width:72px;text-align:center}.rolling{animation:shake .13s linear infinite}@keyframes shake{0%{transform:rotate(-12deg) scale(.95)}50%{transform:rotate(12deg) scale(1.08)}100%{transform:rotate(-12deg) scale(.95)}}
+.btn{border:0;border-radius:14px;padding:13px 18px;font-weight:900;cursor:pointer;box-shadow:0 4px 0 #0002;transition:transform .08s}.btn:active{transform:translateY(2px)}.primary{background:var(--gold);color:#241b00}.secondary{background:#33445f;color:white;border:1px solid #586985}.btn:disabled{opacity:.45;cursor:not-allowed}.players{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.player{background:#10172a;border:1px solid #3a4965;border-radius:12px;padding:9px;font-weight:800;font-size:14px}.player.active{border:2px solid var(--gold);box-shadow:0 0 0 2px #ffd21f20}.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px}.small{font-size:12px;color:var(--muted);line-height:1.5;text-align:center}.hidden{display:none!important}.overlay{position:fixed;inset:0;background:#050914dd;display:flex;align-items:center;justify-content:center;padding:20px;z-index:20}.modal{background:#202d49;border:2px solid var(--gold);border-radius:22px;padding:28px 20px;text-align:center;max-width:360px;width:100%;box-shadow:0 20px 70px #0008}.modal h2{color:var(--gold);font-size:28px;margin:5px}.modal .trophy{font-size:64px}.footer{text-align:center;color:#9cabc4;font-size:12px;padding:12px}
+@media(min-width:600px){.players{grid-template-columns:repeat(4,minmax(0,1fr))}.card{padding:18px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div class="crown">👑</div>
+    <h1>KING LUDO PRO</h1>
+    <p class="tag">🎲 Roll • Play • Win</p>
+    <span class="badge">मोबाइल पर खेलने योग्य • लोकल गेम</span>
+  </header>
+
+  <section class="card">
+    <div class="controls">
+      <label for="mode">खेलने का तरीका:</label>
+      <select id="mode">
+        <option value="local">2–4 खिलाड़ी (एक मोबाइल)</option>
+        <option value="ai">आप बनाम 3 कंप्यूटर</option>
+      </select>
+      <button class="btn secondary" id="soundBtn" type="button">🔊 आवाज़ चालू</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="board-wrap"><div id="board" class="board" aria-label="Ludo board"></div></div>
+    <div id="status" class="status" aria-live="polite">पासा फेंककर खेल शुरू करें!</div>
+    <div class="dice-area">
+      <div id="dice" class="dice" aria-label="Dice">🎲</div>
+      <button id="roll" class="btn primary" type="button">🎲 पासा फेंको</button>
+      <button id="reset" class="btn primary" type="button">🔄 नया गेम</button>
+    </div>
+  </section>
+
+  <section class="card"><div id="players" class="players"></div></section>
+  <p class="small">नियम: गोटी घर से निकालने के लिए 6 चाहिए। 6 आने पर एक अतिरिक्त चाल मिलती है। सुरक्षित खाने पर गोटी नहीं कटती। जीतने के लिए सभी 4 गोटियों को बिल्कुल सही संख्या से फिनिश तक पहुँचाएँ।</p>
+  <div class="footer">KING LUDO PRO • अभी लोकल गेम — ऑनलाइन मल्टीप्लेयर बाद में जोड़ा जाएगा</div>
+</div>
+
+<div id="winOverlay" class="overlay hidden" role="dialog" aria-modal="true">
+  <div class="modal"><div class="trophy">🏆</div><h2 id="winTitle">शानदार जीत!</h2><p id="winText">आप जीत गए!</p><button class="btn primary" id="playAgain">🔄 फिर से खेलें</button></div>
+</div>
+<script>
+(()=>{
+'use strict';
+const $=id=>document.getElementById(id);
+const board=$('board'), status=$('status'), diceBox=$('dice'), rollBtn=$('roll'), mode=$('mode'), playersBox=$('players');
+const colors=[
+ {name:'लाल',key:'red',hex:'#f04444',start:0,home:[ [1,1],[1,4],[4,1],[4,4] ]},
+ {name:'हरा',key:'green',hex:'#22c55e',start:13,home:[ [1,10],[1,13],[4,10],[4,13] ]},
+ {name:'पीला',key:'yellow',hex:'#eab308',start:26,home:[ [10,10],[10,13],[13,10],[13,13] ]},
+ {name:'नीला',key:'blue',hex:'#3b82f6',start:39,home:[ [10,1],[10,4],[13,1],[13,4] ]}
+];
+const path=[
+[6,1],[6,2],[6,3],[6,4],[6,5],[5,6],[4,6],[3,6],[2,6],[1,6],[0,6],[0,7],[0,8],[1,8],[2,8],[3,8],[4,8],[5,8],[6,9],[6,10],[6,11],[6,12],[6,13],[6,14],[7,14],[8,14],[8,13],[8,12],[8,11],[8,10],[8,9],[9,8],[10,8],[11,8],[12,8],[13,8],[14,8],[14,7],[14,6],[13,6],[12,6],[11,6],[10,6],[9,6],[8,5],[8,4],[8,3],[8,2],[8,1],[8,0],[7,0],[6,0]
+];
+const safeIdx=new Set([0,8,13,21,26,34,39,47]);
+const lanes=[
+[[7,1],[7,2],[7,3],[7,4],[7,5],[7,6]],
+[[1,7],[2,7],[3,7],[4,7],[5,7],[6,7]],
+[[7,13],[7,12],[7,11],[7,10],[7,9],[7,8]],
+[[13,7],[12,7],[11,7],[10,7],[9,7],[8,7]]
+];
+let tokens=[],turn=0,rolled=false,die=0,finished=false,gameId=0,sound=true,audio=null;
+const key=(r,c)=>r+','+c;
+function soundTone(freq=440,duration=.1,type='sine'){
+ if(!sound)return;
+ try{audio=audio||new(window.AudioContext||window.webkitAudioContext)();const o=audio.createOscillator(),g=audio.createGain();o.type=type;o.frequency.value=freq;g.gain.setValueAtTime(.07,audio.currentTime);g.gain.exponentialRampToValueAtTime(.001,audio.currentTime+duration);o.connect(g);g.connect(audio.destination);o.start();o.stop(audio.currentTime+duration)}catch(e){}
+}
+function makeTokens(){tokens=colors.map(()=>Array.from({length:4},()=>({step:-1})))}
+function coordFor(p,i,t){
+ if(t.step<0)return colors[p].home[i];
+ if(t.step>=57)return [7,7];
+ if(t.step>=52)return lanes[p][t.step-52];
+ const idx=(colors[p].start+t.step)%52;return path[idx];
+}
+function setupBoard(){
+ board.innerHTML='';
+ const cellMap=new Map();
+ for(let r=0;r<15;r++)for(let c=0;c<15;c++){
+  const el=document.createElement('div');el.className='cell';el.dataset.pos=key(r,c);
+  if(r<6&&c<6)el.classList.add('home-red');
+  else if(r<6&&c>8)el.classList.add('home-green');
+  else if(r>8&&c>8)el.classList.add('home-yellow');
+  else if(r>8&&c<6)el.classList.add('home-blue');
+  else el.classList.add('track');
+  if((r===7&&c>=1&&c<=6))el.classList.add('lane-red');
+  if((c===7&&r>=1&&r<=6))el.classList.add('lane-green');
+  if((r===7&&c>=8&&c<=13))el.classList.add('lane-yellow');
+  if((c===7&&r>=8&&r<=13))el.classList.add('lane-blue');
+  if((r===7&&c===7))el.classList.add('center');
+  const pi=path.findIndex(a=>a[0]===r&&a[1]===c);
+  if(pi>=0){el.classList.add('track');if(safeIdx.has(pi))el.classList.add('safe');}
+  const laneStart=lanes.findIndex(l=>l.some(a=>a[0]===r&&a[1]===c));
+  if(laneStart>=0){el.classList.remove('track');el.classList.add('lane-'+colors[laneStart].key);}
+  if((r===6&&c===1)||(r===1&&c===8)||(r===8&&c===13)||(r===13&&c===6))el.classList.add('safe');
+  if(r===7&&c===7)el.textContent='👑';
+  if((r===0||r===14)&&(c===6||c===7||c===8))el.style.background='#fff';
+  if((c===0||c===14)&&(r===6||r===7||r===8))el.style.background='#fff';
+  board.appendChild(el);cellMap.set(key(r,c),el);
+ }
+ colors.forEach((col,p)=>{
+  const yard=document.createElement('div');yard.className='yard';yard.style.gridColumn=p===0?'1 / 7':p===1?'10 / 16':p===2?'10 / 16':'1 / 7';yard.style.gridRow=p===0?'1 / 7':p===1?'1 / 7':p===2?'10 / 16':'10 / 16';
+  col.home.forEach(()=>{const s=document.createElement('span');yard.appendChild(s)});
+  // Yard is an overlay in the colored home corner.
+  yard.style.position='absolute';yard.style.width='40%';yard.style.height='40%';yard.style.zIndex='1';
+  // CSS grid children need board-relative positioning; use a dedicated layer instead.
+ });
+ // Put four white base circles into each home quadrant using board cells.
+ [[1,1],[1,4],[4,1],[4,4],[1,10],[1,13],[4,10],[4,13],[10,10],[10,13],[13,10],[13,13],[10,1],[10,4],[13,1],[13,4]].forEach(([r,c])=>{
+  const el=cellMap.get(key(r,c));if(el){el.style.background='#ffffffa8';el.style.borderRadius='50%';el.style.border='3px solid #fff';el.style.margin='10%';}
+ });
+ render();
+}
+function render(){
+ board.querySelectorAll('.token').forEach(e=>e.remove());
+ const counts={};
+ tokens.forEach((arr,p)=>arr.forEach((t,i)=>{
+  const [r,c]=coordFor(p,i,t), k=key(r,c);counts[k]=(counts[k]||0)+1;
+  const cell=board.querySelector(`[data-pos="${k}"]`);if(!cell)return;
+  const b=document.createElement('button');b.type='button';b.className='token '+colors[p].key;
+  if(rolled&&p===turn&&canMove(t))b.classList.add('selectable');
+  b.textContent=t.step>=57?'★':String(i+1);b.setAttribute('aria-label',colors[p].name+' गोटी '+(i+1));
+  if(rolled&&p===turn&&canMove(t))b.addEventListener('click',()=>move(p,i));
+  else b.addEventListener('click',()=>{if(p===turn&&!rolled)status.textContent='पहले पासा फेंको!';else if(rolled&&p===turn)status.textContent='यह गोटी अभी नहीं चल सकती।'});
+  cell.appendChild(b);
+ }));
+ [...playersBox.children].forEach((el,i)=>el.classList.toggle('active',i===turn&&!finished));
+ renderPlayers();
+}
+function renderPlayers(){
+ playersBox.innerHTML='';
+ colors.forEach((c,i)=>{const div=document.createElement('div');div.className='player'+(i===turn&&!finished?' active':'');div.innerHTML=`<span class="dot" style="background:${c.hex}"></span>${c.name} ${mode.value==='ai'&&i>0?'🤖':''}<br><small>${tokens[i].filter(t=>t.step>=57).length}/4 फिनिश</small>`;playersBox.appendChild(div)});
+}
+function canMove(t){return t.step<57&&(t.step>=0||die===6)}
+function hasMoves(){return tokens[turn].some(canMove)}
+function nextTurn(){turn=(turn+1)%4;rolled=false;die=0;diceBox.textContent='🎲';render();status.textContent=colors[turn].name+' खिलाड़ी की बारी। पासा फेंकें!';if(mode.value==='ai'&&turn!==0)aiTurn()}
+function rollDice(){
+ if(rolled||finished)return;
+ die=Math.floor(Math.random()*6)+1;rolled=true;diceBox.textContent=['⚀','⚁','⚂','⚃','⚄','⚅'][die-1];soundTone(360+die*70,.16,'triangle');
+ status.textContent=colors[turn].name+' की बारी — '+die+' आया! '+(hasMoves()?'चलने वाली गोटी चुनें।':'कोई चाल नहीं।');
+ render();
+ if(!hasMoves()){setTimeout(()=>{if(finished)return;if(die===6){rolled=false;status.textContent='6 आया, फिर से पासा फेंकें!';}else nextTurn()},700)}
+}
+function move(p,i){
+ if(!rolled||p!==turn||finished)return;
+ const t=tokens[p][i];if(!canMove(t))return;
+ let captured=false;
+ if(t.step<0)t.step=0;else t.step=Math.min(57,t.step+die);
+ soundTone(540,.09,'square');
+ if(t.step<52){
+  const absolute=(colors[p].start+t.step)%52;
+  if(!safeIdx.has(absolute)){
+   tokens.forEach((arr,op)=>{if(op===p)return;arr.forEach(other=>{
+    if(other.step>=0&&other.step<52&&(colors[op].start+other.step)%52===absolute){other.step=-1;captured=true}
+   })});
+  }
+ }
+ const won=tokens[p].every(x=>x.step>=57);
+ if(won){finished=true;rolled=false;render();$('winTitle').textContent='🏆 '+colors[p].name+' की जीत!';$('winText').textContent='शानदार खेल! KING LUDO PRO चैंपियन!';$('winOverlay').classList.remove('hidden');soundTone(660,.18);setTimeout(()=>soundTone(880,.25),180);return}
+ const extra=die===6||captured||t.step===57;
+ const oldDie=die;rolled=false;render();
+ if(captured){status.textContent='⚔️ गोटी काटी! '+colors[p].name+' को एक अतिरिक्त चाल मिली।';soundTone(220,.22,'sawtooth')}
+ else if(t.step===57)status.textContent='✨ गोटी फिनिश पर पहुँच गई!';
+ if(extra){status.textContent+=(oldDie===6?' 6 आया — फिर से पासा फेंको!':' अतिरिक्त चाल!');die=0;diceBox.textContent='🎲';if(mode.value==='ai'&&turn!==0)setTimeout(aiTurn,600)}
+ else nextTurn();
+}
+function aiTurn(){
+ if(finished||mode.value!=='ai'||turn===0)return;
+ const id=gameId;
+ setTimeout(()=>{if(id!==gameId||finished||turn===0)return;if(!rolled){rollDice();if(!rolled)return;setTimeout(aiChoose,500)}else aiChoose()},650)
+}
+function aiChoose(){
+ if(finished||turn===0||!rolled)return;
+ const options=tokens[turn].map((t,i)=>({t,i})).filter(x=>canMove(x.t));
+ if(!options.length){nextTurn();return}
+ options.sort((a,b)=>{
+  const score=x=>(x.t.step<0?10:x.t.step+die>=57?100:x.t.step+die);
+  return score(b)-score(a)
+ });
+ move(turn,options[0].i);
+}
+function newGame(){
+ gameId++;makeTokens();turn=0;rolled=false;die=0;finished=false;diceBox.textContent='🎲';$('winOverlay').classList.add('hidden');
+ setupBoard();status.textContent='पासा फेंककर खेल शुरू करें!';rollBtn.disabled=false;
+}
+rollBtn.addEventListener('click',rollDice);
+$('reset').addEventListener('click',newGame);
+$('playAgain').addEventListener('click',newGame);
+mode.addEventListener('change',newGame);
+$('soundBtn').addEventListener('click',()=>{sound=!sound;$('soundBtn').textContent=sound?'🔊 आवाज़ चालू':'🔇 आवाज़ बंद';if(sound)soundTone(520,.12)});
+makeTokens();setupBoard();renderPlayers();
+})();
+</script>
+</body>
+</html>
