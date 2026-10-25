@@ -1,62 +1,98 @@
 <!doctype html>
-<html lang="hi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>KING LUDO PRO</title>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>KING LUDO PRO</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#101827;color:#fff;font-family:Arial,sans-serif;text-align:center;padding:12px}h1{color:#ffd54a;margin:8px 0}.panel{max-width:650px;margin:auto;background:#1d293b;border-radius:16px;padding:12px}.row{display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap;margin:10px}select,button{padding:11px;border:0;border-radius:9px;font-weight:bold;font-size:15px}button{background:#ffc83d;color:#172033}#status{min-height:28px;font-weight:bold;margin:10px}#dice{font-size:30px;background:white;color:#172033;border-radius:9px;padding:6px 14px}.wrap{width:min(94vw,600px);margin:12px auto}canvas{display:block;width:100%;height:auto;background:white;border:4px solid #e2e8f0;border-radius:8px;touch-action:manipulation}.small{font-size:12px;color:#b8c4d8;line-height:1.5}
-</style></head><body><h1>👑 KING LUDO PRO</h1><p>ROLL • RACE • RULE THE BOARD</p><div class="panel">
-<div class="row">Mode <select id="mode"><option value="cpu">Play vs Computer</option><option value="local">Local 2–4 Players</option></select> Players <select id="players"><option>2</option><option>3</option><option selected>4</option></select> <button id="new">New Game</button></div>
-<div id="status">Red ki baari — dice roll karo.</div><div class="row"><span id="dice">⚀</span><button id="roll">🎲 ROLL DICE</button></div>
-<div class="wrap"><canvas id="board" width="600" height="600"></canvas></div><p class="small">6 par token ghar se niklega. Dice roll ke baad apne highlighted token par tap karein. Stars safe checkpoints hain. Simplified Ludo rules.</p>
-</div>
+*{box-sizing:border-box}
+:root{--gold:#ffd76a;--ink:#101827;--panel:#1b2940}
+body{margin:0;padding:16px;background:radial-gradient(ellipse at top,#263b5b 0%,#101827 58%,#080d16 100%);color:#fff;font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;text-align:center;min-height:100vh}
+h1{color:var(--gold);margin:8px 0;font-size:clamp(27px,5vw,40px);letter-spacing:1.5px;text-shadow:0 3px 0 #7b4a00,0 0 22px #ffcc5570}
+.subtitle{margin:0 0 16px;color:#c8d5e8;letter-spacing:3px;font-size:11px;font-weight:800}
+.panel{max-width:700px;margin:auto;background:linear-gradient(145deg,#202f49,#121d30);border:1px solid #526681;border-radius:22px;padding:clamp(10px,3vw,20px);box-shadow:0 18px 50px #0008,inset 0 1px #ffffff18}
+.row{display:flex;justify-content:center;align-items:center;gap:9px;flex-wrap:wrap;margin:12px 0}
+select,button{font-size:14px;font-weight:800;padding:11px 13px;border:1px solid #ffffff20;border-radius:12px;max-width:100%}
+select{background:#eef4ff;color:#152033;box-shadow:0 3px 0 #9caec7}
+button{background:linear-gradient(180deg,#ffe99a,#ffbf35);color:#172033;box-shadow:0 4px 0 #a66c12;cursor:pointer;transition:transform .14s,filter .14s,box-shadow .14s}
+button:hover:not(:disabled){filter:brightness(1.08);transform:translateY(-2px);box-shadow:0 6px 0 #a66c12}
+button:active:not(:disabled){transform:translateY(2px);box-shadow:0 1px 0 #a66c12}
+button:disabled{opacity:.48;cursor:not-allowed;box-shadow:none}
+#status{min-height:30px;font-weight:800;margin:12px auto;padding:9px 12px;max-width:550px;color:#fff3c2;background:#ffffff0c;border:1px solid #ffffff16;border-radius:12px;line-height:1.4}
+.dice{font-size:38px;min-width:62px;background:linear-gradient(145deg,#fff,#dce7f7);color:#172033;border:2px solid #fff;border-radius:14px;padding:5px 12px;box-shadow:0 5px 0 #8291a7,0 9px 20px #0005}
+.dice.rolling{animation:diceRoll .42s ease-in-out}
+@keyframes diceRoll{0%{transform:rotate(0) scale(1)}35%{transform:rotate(18deg) scale(1.14)}70%{transform:rotate(-16deg) scale(.92)}100%{transform:rotate(0) scale(1)}}
+.board{width:min(94vw,620px);margin:16px auto;padding:7px;background:linear-gradient(135deg,#fff4c9,#b9c8e0,#fff);border-radius:16px;box-shadow:0 12px 32px #0008}
+canvas{display:block;width:100%;height:auto;border:2px solid #e8edf7;border-radius:10px;background:#fff;touch-action:manipulation}
+.hint{font-size:12px;color:#c2ccdc;line-height:1.6;max-width:550px;margin:12px auto 4px}
+@media(max-width:420px){body{padding:8px}.row{gap:7px}select,button{font-size:12px;padding:10px}.dice{font-size:31px;min-width:52px}}
+
+</style></head><body>
+<h1>👑 KING LUDO PRO</h1><p class="subtitle">ROLL • RACE • RULE THE BOARD</p><div class="panel">
+<div class="row">Mode <select id="mode"><option value="cpu">Play vs Computer</option><option value="local">Local Pass & Play</option></select> Players <select id="players"><option value="2">2 Players</option><option value="3">3 Players</option><option value="4" selected>4 Players</option></select><button id="new">New Game</button></div>
+<div id="status">Red's turn — roll the dice.</div><div class="row"><span class="dice" id="dice">⚀</span><button id="roll">🎲 ROLL DICE</button></div>
+<div class="board"><canvas id="board" width="600" height="600"></canvas></div>
+<p class="hint">🎲 Roll a 6 to leave home • Tap a glowing token to move • ★ squares are safe • Sound effects start after your first tap.</p></div>
 <script>
 (()=>{
-const cv=document.querySelector('#board'),c=cv.getContext('2d'),U=40;
-const colors=['#e53945','#20a45a','#f5c83d','#347fe5'],pale=['#ffe0e3','#d9f8e8','#fff2c2','#dceaff'],names=['RED','GREEN','YELLOW','BLUE'];
-const start=[0,13,26,39],safe=[0,8,13,21,26,34,39,47];
-/* Clockwise 52-square outer path around a 15x15 grid. */
-const track=[[6,1],[6,2],[6,3],[6,4],[6,5],[5,6],[4,6],[3,6],[2,6],[1,6],[0,6],[0,7],[0,8],[1,8],[2,8],[3,8],[4,8],[5,8],[6,9],[6,10],[6,11],[6,12],[6,13],[6,14],[7,14],[8,14],[8,13],[8,12],[8,11],[8,10],[8,9],[9,8],[10,8],[11,8],[12,8],[13,8],[14,8],[14,7],[14,6],[13,6],[12,6],[11,6],[10,6],[9,6],[8,5],[8,4],[8,3],[8,2],[8,1],[8,0],[7,0],[6,0]];
-const lane=[
-[[7,1],[7,2],[7,3],[7,4],[7,5]], // red toward center
-[[1,7],[2,7],[3,7],[4,7],[5,7]], // green
-[[7,13],[7,12],[7,11],[7,10],[7,9]], // yellow
-[[13,7],[12,7],[11,7],[10,7],[9,7]] // blue
-];
-const yards=[
+const cv=document.getElementById('board'),g=cv.getContext('2d'),cell=40;
+const C=['#e53945','#20a45a','#f4c735','#347fe5'],P=['#ffe1e4','#d9f7e7','#fff3c5','#dceaff'],N=['RED','GREEN','YELLOW','BLUE'];
+// 52-square outer track, clockwise around the 15x15 Ludo grid.
+const T=[[6,1],[6,2],[6,3],[6,4],[6,5],[5,6],[4,6],[3,6],[2,6],[1,6],[0,6],[0,7],[0,8],[1,8],[2,8],[3,8],[4,8],[5,8],[6,9],[6,10],[6,11],[6,12],[6,13],[6,14],[7,14],[8,14],[8,13],[8,12],[8,11],[8,10],[8,9],[9,8],[10,8],[11,8],[12,8],[13,8],[14,8],[14,7],[14,6],[13,6],[12,6],[11,6],[10,6],[9,6],[8,5],[8,4],[8,3],[8,2],[8,1],[8,0],[7,0],[6,0]];
+// Five coloured home-lane squares, followed by the center finish.
+const L=[[[7,1],[7,2],[7,3],[7,4],[7,5]],[[1,7],[2,7],[3,7],[4,7],[5,7]],[[7,13],[7,12],[7,11],[7,10],[7,9]],[[13,7],[12,7],[11,7],[10,7],[9,7]]];
+const Y=[
 [[1.7,1.7],[4.3,1.7],[1.7,4.3],[4.3,4.3]],
 [[1.7,10.7],[4.3,10.7],[1.7,13.3],[4.3,13.3]],
 [[10.7,10.7],[13.3,10.7],[10.7,13.3],[13.3,13.3]],
 [[10.7,1.7],[13.3,1.7],[10.7,4.3],[13.3,4.3]]
 ];
-let P=4,mode='cpu',turn=0,dice=0,rolled=false,legal=[],busy=false,over=false,tokens=[];
-function reset(){P=+document.querySelector('#players').value;mode=document.querySelector('#mode').value;tokens=Array.from({length:4},()=>Array.from({length:4},()=>({pos:-1,done:false})));turn=0;dice=0;rolled=false;legal=[];busy=false;over=false;document.querySelector('#dice').textContent='⚀';document.querySelector('#roll').disabled=false;draw();status();if(mode==='cpu'&&turn!==0)computerRoll()}
-function human(){return mode==='local'||turn===0}
-function status(s){document.querySelector('#status').textContent=s||(over?names[turn]+' WINS! 🎉':names[turn]+"'S turn — "+(rolled?'tap a highlighted token':'roll the dice'))}
-function can(p,i){let t=tokens[p][i];return !t.done&&(t.pos<0?dice===6:t.pos+dice<=57)}
-function doRoll(ai=false){if(over||rolled||busy)return;if(!ai&&!human())return;busy=true;document.querySelector('#roll').disabled=true;setTimeout(()=>{dice=1+Math.floor(Math.random()*6);document.querySelector('#dice').textContent=['⚀','⚁','⚂','⚃','⚄','⚅'][dice-1];rolled=true;legal=[];for(let i=0;i<4;i++)if(can(turn,i))legal.push(i);busy=false;
-if(!legal.length){rolled=false;draw();status(names[turn]+' has no move. Next turn…');setTimeout(next,800);return}draw();status(names[turn]+' rolled '+dice+(ai?' — computer moving…':'. Tap highlighted token'));if(ai){busy=true;setTimeout(aiMove,650)}else document.querySelector('#roll').disabled=false;
-},200)}
-function computerRoll(){if(over||mode!=='cpu'||turn===0)return;setTimeout(()=>doRoll(true),650)}
-function posCell(p,t,i){if(t.done)return [7,7];if(t.pos<0)return yards[p][i];if(t.pos<51)return track[(start[p]+t.pos)%52];if(t.pos===57)return [7,7];return lane[p][Math.min(4,t.pos-51)]}
-function moveToken(p,i){let t=tokens[p][i];if(t.pos<0)t.pos=0;else t.pos+=dice;if(t.pos>=57){t.pos=57;t.done=true}
-let captured=false;if(!t.done&&t.pos<51&&!safe.includes((start[p]+t.pos)%52)){let sq=track[(start[p]+t.pos)%52];for(let q=0;q<P;q++)if(q!==p)for(let o of tokens[q])if(o.pos>=0&&o.pos<51&&!o.done){let os=track[(start[q]+o.pos)%52];if(os[0]===sq[0]&&os[1]===sq[1]){o.pos=-1;captured=true}}}
-let six=dice===6;rolled=false;legal=[];busy=false;draw();if(tokens[p].every(x=>x.done)){over=true;status(names[p]+' WINS! 🎉');document.querySelector('#roll').disabled=true;return}
-if(six||captured){status(names[p]+' gets another turn!');document.querySelector('#roll').disabled=!human();if(!human())computerRoll()}else next()}
-function tapToken(i){if(!rolled||busy||over||!human()||!legal.includes(i))return;busy=true;document.querySelector('#roll').disabled=true;moveToken(turn,i)}
-function aiMove(){if(over)return;let opts=legal.filter(i=>can(turn,i));if(!opts.length){rolled=false;next();return}let best=opts[0],scoreBest=-1e9;for(let i of opts){let t=tokens[turn][i],n=t.pos<0?0:t.pos+dice,score=Math.random()*2+(t.pos<0?20:t.pos);if(n>=57)score+=100;if(n<51&&!safe.includes((start[turn]+n)%52)){let sq=track[(start[turn]+n)%52];for(let q=0;q<P;q++)if(q!==turn)for(let o of tokens[q])if(o.pos>=0&&o.pos<51){let os=track[(start[q]+o.pos)%52];if(os[0]===sq[0]&&os[1]===sq[1])score+=50}}if(score>scoreBest){scoreBest=score;best=i}}moveToken(turn,best)}
-function next(){if(over)return;turn=(turn+1)%P;rolled=false;legal=[];busy=false;document.querySelector('#roll').disabled=!human();draw();status();if(!human())computerRoll()}
-function draw(){c.clearRect(0,0,600,600);c.fillStyle='#fff';c.fillRect(0,0,600,600);
-const bases=[{x:0,y:0,p:0},{x:0,y:9,p:1},{x:9,y:9,p:2},{x:9,y:0,p:3}];
-for(let b of bases){c.fillStyle=pale[b.p];c.fillRect(b.x*U,b.y*U,6*U,6*U);c.fillStyle=colors[b.p];c.fillRect((b.x+.35)*U,(b.y+.35)*U,5.3*U,5.3*U);c.fillStyle='#fff';c.fillRect((b.x+1)*U,(b.y+1)*U,4*U,4*U);for(let i=0;i<4;i++){let [x,y]=yards[b.p][i];c.beginPath();c.arc((x+.5)*U,(y+.5)*U,15,0,Math.PI*2);c.fillStyle=pale[b.p];c.fill();c.lineWidth=3;c.strokeStyle=colors[b.p];c.stroke()}}
-/* path squares and star checkpoints */for(let i=0;i<52;i++){let [r,col]=track[i];c.fillStyle='#fff';c.fillRect(col*U,r*U,U,U);c.strokeStyle='#aab2bd';c.lineWidth=1;c.strokeRect(col*U,r*U,U,U);if(safe.includes(i)){c.fillStyle='#64748b';c.font='20px Arial';c.textAlign='center';c.textBaseline='middle';c.fillText('★',(col+.5)*U,(r+.5)*U)}}
-for(let p=0;p<4;p++){let [r,col]=track[start[p]];c.fillStyle=colors[p];c.fillRect(col*U,r*U,U,U)}
-for(let p=0;p<4;p++)for(let j=0;j<5;j++){let [r,col]=lane[p][j];c.fillStyle=colors[p];c.globalAlpha=.35;c.fillRect(col*U,r*U,U,U);c.globalAlpha=1;c.strokeStyle='#aab2bd';c.strokeRect(col*U,r*U,U,U)}
-// Center finish four triangles
-const tri=(pts,color)=>{c.beginPath();c.moveTo(pts[0][0]*U,pts[0][1]*U);for(let a of pts.slice(1))c.lineTo(a[0]*U,a[1]*U);c.closePath();c.fillStyle=color;c.fill()};
-tri([[6,6],[9,6],[7.5,7.5]],colors[3]);tri([[9,6],[9,9],[7.5,7.5]],colors[2]);tri([[9,9],[6,9],[7.5,7.5]],colors[1]);tri([[6,9],[6,6],[7.5,7.5]],colors[0]);
-// grid lines
-c.strokeStyle='#9aa4b2';c.lineWidth=1;for(let i=0;i<=15;i++){c.beginPath();c.moveTo(i*U,0);c.lineTo(i*U,600);c.stroke();c.beginPath();c.moveTo(0,i*U);c.lineTo(600,i*U);c.stroke()}
-for(let p=0;p<P;p++)for(let i=0;i<4;i++){let t=tokens[p][i],[r,col]=posCell(p,t,i),x=(col+.5)*U,y=(r+.5)*U;c.beginPath();c.arc(x,y,12,0,Math.PI*2);c.fillStyle=colors[p];c.fill();c.lineWidth=2;c.strokeStyle='#fff';c.stroke();c.strokeStyle='#172033';c.lineWidth=1;c.stroke();c.fillStyle='#fff';c.font='bold 10px Arial';c.fillText(String(i+1),x,y+3);if(rolled&&p===turn&&legal.includes(i)&&human()){c.beginPath();c.arc(x,y,17,0,Math.PI*2);c.lineWidth=3;c.strokeStyle='#ff9f00';c.stroke()}}
+const START=[0,13,26,39],SAFE=[0,8,13,21,26,34,39,47];
+let count=4,mode='cpu',turn=0,dice=0,rolled=false,legal=[],busy=false,ended=false,tokens=[];
+const $=s=>document.querySelector(s);
+let audioCtx=null;
+function sound(kind){
+  try{
+    audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();
+    if(audioCtx.state==='suspended')audioCtx.resume();
+    const now=audioCtx.currentTime;
+    const notes=kind==='win'?[523,659,784,1046]:kind==='capture'?[660,440]:kind==='move'?[520,680]:kind==='roll'?[300,440,620]:[440];
+    notes.forEach((freq,i)=>{
+      const osc=audioCtx.createOscillator(),gain=audioCtx.createGain();
+      osc.type=kind==='roll'?'triangle':'sine';osc.frequency.setValueAtTime(freq,now+i*.075);
+      gain.gain.setValueAtTime(.0001,now+i*.075);gain.gain.exponentialRampToValueAtTime(.12,now+i*.075+.015);
+      gain.gain.exponentialRampToValueAtTime(.0001,now+i*.075+.13);
+      osc.connect(gain);gain.connect(audioCtx.destination);osc.start(now+i*.075);osc.stop(now+i*.075+.15);
+    });
+  }catch(e){}
 }
-cv.addEventListener('click',e=>{let rect=cv.getBoundingClientRect(),x=(e.clientX-rect.left)*600/rect.width,y=(e.clientY-rect.top)*600/rect.height;let best=-1,dmin=1e9;for(let i of legal){let t=tokens[turn][i],[r,col]=posCell(turn,t,i),d=Math.hypot(x-(col+.5)*U,y-(r+.5)*U);if(d<dmin){dmin=d;best=i}}if(best>=0&&dmin<28)tapToken(best)});
-document.querySelector('#roll').onclick=()=>doRoll(false);document.querySelector('#new').onclick=reset;document.querySelector('#players').onchange=reset;document.querySelector('#mode').onchange=reset;reset();
+function reset(){count=+$(' #players'.trim()).value;mode=$('#mode').value;tokens=Array.from({length:4},()=>Array.from({length:4},()=>({step:-1,done:false})));turn=0;dice=0;rolled=false;legal=[];busy=false;ended=false;$('#dice').textContent='⚀';$('#roll').disabled=false;draw();say();if(!isHuman())scheduleAI()}
+function isHuman(){return mode==='local'||turn===0}
+function say(s){$('#status').textContent=s||(ended?N[turn]+' WINS! 🎉':N[turn]+"'S turn — "+(rolled?'tap a highlighted token':'roll the dice'))}
+function trackIndex(p,step){return (START[p]+step)%52}
+function canMove(p,i){const t=tokens[p][i];return !t.done&&(t.step<0?dice===6:t.step+dice<=57)}
+function cellFor(p,i){const t=tokens[p][i];if(t.done)return [7,7];if(t.step<0)return Y[p][i];if(t.step<=50)return T[trackIndex(p,t.step)];if(t.step<=55)return L[p][t.step-51];return [7,7]}
+function roll(ai=false){if(ended||rolled||busy||(!ai&&!isHuman()))return; sound('roll');const die=$('#dice');die.classList.remove('rolling');void die.offsetWidth;die.classList.add('rolling');busy=true;$('#roll').disabled=true;setTimeout(()=>{if(ended)return;dice=1+Math.floor(Math.random()*6);$('#dice').textContent=['⚀','⚁','⚂','⚃','⚄','⚅'][dice-1];rolled=true;legal=[];for(let i=0;i<4;i++)if(canMove(turn,i))legal.push(i);busy=false;
+if(!legal.length){rolled=false;draw();say(N[turn]+' has no legal move. Next player…');setTimeout(next,800);return}draw();say(N[turn]+' rolled '+dice+(ai?' — computer moving…':'. Tap a highlighted token'));if(ai){busy=true;setTimeout(aiMove,550)}else $('#roll').disabled=false;
+},180)}
+function scheduleAI(){if(mode==='cpu'&&turn!==0&&!ended)setTimeout(()=>roll(true),700)}
+function move(p,i){const t=tokens[p][i];if(t.step<0)t.step=0;else t.step+=dice;if(t.step>=57){t.step=57;t.done=true}
+let captured=false;
+if(!t.done&&t.step<=50){let idx=trackIndex(p,t.step),sq=T[idx];if(!SAFE.includes(idx)){for(let q=0;q<count;q++)if(q!==p)for(const o of tokens[q])if(!o.done&&o.step>=0&&o.step<=50){const os=T[trackIndex(q,o.step)];if(os[0]===sq[0]&&os[1]===sq[1]){o.step=-1;captured=true}}}}
+const six=dice===6;rolled=false;legal=[];busy=false;sound(captured?'capture':'move');draw();if(tokens[p].every(x=>x.done)){ended=true;sound('win');say(N[p]+' WINS! 🎉');$('#roll').disabled=true;return}
+if(six||captured){say(N[p]+' gets another turn!');$('#roll').disabled=!isHuman();if(!isHuman())scheduleAI()}else next()}
+function humanMove(i){if(!rolled||busy||ended||!isHuman()||!legal.includes(i))return;busy=true;$('#roll').disabled=true;move(turn,i)}
+function aiMove(){if(ended)return;const opts=legal.filter(i=>canMove(turn,i));if(!opts.length){rolled=false;next();return}let best=opts[0],bestScore=-999;for(const i of opts){const t=tokens[turn][i],step=t.step<0?0:t.step+dice;let score=Math.random()*2+(t.step<0?18:t.step);if(step>=57)score+=100;if(step<=50){const idx=trackIndex(turn,step),sq=T[idx];if(!SAFE.includes(idx))for(let q=0;q<count;q++)if(q!==turn)for(const o of tokens[q])if(o.step>=0&&o.step<=50&&!o.done){const os=T[trackIndex(q,o.step)];if(os[0]===sq[0]&&os[1]===sq[1])score+=45}}if(score>bestScore){bestScore=score;best=i}}move(turn,best)}
+function next(){if(ended)return;turn=(turn+1)%count;rolled=false;legal=[];busy=false;$('#roll').disabled=!isHuman();draw();say();scheduleAI()}
+function draw(){
+g.clearRect(0,0,600,600);g.fillStyle='#fff';g.fillRect(0,0,600,600);
+const bases=[{x:0,y:0,p:0},{x:0,y:9,p:1},{x:9,y:9,p:2},{x:9,y:0,p:3}];
+for(const b of bases){g.fillStyle=P[b.p];g.fillRect(b.x*cell,b.y*cell,6*cell,6*cell);g.fillStyle=C[b.p];g.fillRect((b.x+.35)*cell,(b.y+.35)*cell,5.3*cell,5.3*cell);g.fillStyle='#fff';g.fillRect((b.x+1)*cell,(b.y+1)*cell,4*cell,4*cell);for(let i=0;i<4;i++){const [x,y]=Y[b.p][i];g.beginPath();g.arc((x+.5)*cell,(y+.5)*cell,15,0,Math.PI*2);g.fillStyle=P[b.p];g.fill();g.lineWidth=3;g.strokeStyle=C[b.p];g.stroke()}}
+for(let i=0;i<52;i++){const [r,col]=T[i];g.fillStyle='#fff';g.fillRect(col*cell,r*cell,cell,cell);g.strokeStyle='#9aa5b4';g.lineWidth=1;g.strokeRect(col*cell,r*cell,cell,cell);if(SAFE.includes(i)){g.fillStyle='#64748b';g.font='20px Arial';g.textAlign='center';g.textBaseline='middle';g.fillText('★',(col+.5)*cell,(r+.5)*cell)}}
+for(let p=0;p<4;p++){const [r,col]=T[START[p]];g.fillStyle=C[p];g.fillRect(col*cell,r*cell,cell,cell)}
+for(let p=0;p<4;p++)for(const [r,col] of L[p]){g.fillStyle=C[p];g.globalAlpha=.34;g.fillRect(col*cell,r*cell,cell,cell);g.globalAlpha=1;g.strokeStyle='#9aa5b4';g.strokeRect(col*cell,r*cell,cell,cell)}
+const tri=(a,col)=>{g.beginPath();g.moveTo(a[0][0]*cell,a[0][1]*cell);for(const pt of a.slice(1))g.lineTo(pt[0]*cell,pt[1]*cell);g.closePath();g.fillStyle=col;g.fill()};
+tri([[6,6],[9,6],[7.5,7.5]],C[3]);tri([[9,6],[9,9],[7.5,7.5]],C[2]);tri([[9,9],[6,9],[7.5,7.5]],C[1]);tri([[6,9],[6,6],[7.5,7.5]],C[0]);
+g.strokeStyle='#9aa5b4';g.lineWidth=1;for(let i=0;i<=15;i++){g.beginPath();g.moveTo(i*cell,0);g.lineTo(i*cell,600);g.stroke();g.beginPath();g.moveTo(0,i*cell);g.lineTo(600,i*cell);g.stroke()}
+for(let p=0;p<count;p++)for(let i=0;i<4;i++){const t=tokens[p][i],[r,col]=cellFor(p,i),x=(col+.5)*cell,y=(r+.5)*cell;g.save();g.shadowColor='#0007';g.shadowBlur=5;g.shadowOffsetY=3;g.beginPath();g.arc(x,y,12.5,0,Math.PI*2);g.fillStyle=C[p];g.fill();g.restore();g.beginPath();g.arc(x-3,y-3,4,0,Math.PI*2);g.fillStyle='#ffffff9c';g.fill();g.lineWidth=2.5;g.strokeStyle='#fff';g.stroke();g.strokeStyle='#172033';g.lineWidth=1;g.stroke();g.fillStyle='#fff';g.font='bold 10px Arial';g.textAlign='center';g.fillText(String(i+1),x,y+3);if(rolled&&p===turn&&legal.includes(i)&&isHuman()){g.beginPath();g.arc(x,y,18,0,Math.PI*2);g.lineWidth=3;g.strokeStyle='#ff9800';g.stroke();g.beginPath();g.arc(x,y,22,0,Math.PI*2);g.lineWidth=1.5;g.strokeStyle='#ffcf58';g.stroke()}}
+}
+cv.addEventListener('click',e=>{const rect=cv.getBoundingClientRect(),x=(e.clientX-rect.left)*600/rect.width,y=(e.clientY-rect.top)*600/rect.height;let choice=-1,dist=1e9;for(const i of legal){const [r,col]=cellFor(turn,i),d=Math.hypot(x-(col+.5)*cell,y-(r+.5)*cell);if(d<dist){dist=d;choice=i}}if(choice>=0&&dist<29)humanMove(choice)});
+$('#roll').addEventListener('click',()=>roll(false));$('#new').addEventListener('click',reset);$('#players').addEventListener('change',reset);$('#mode').addEventListener('change',reset);reset();
 })();
 </script></body></html>
