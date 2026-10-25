@@ -1,33 +1,49 @@
-name: Build KING LUDO PRO APK
+name: Build Android APK
+
 on:
+  push:
+    branches: [ "main" ]
   workflow_dispatch:
+
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set up Java
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Set up Java JDK
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
+          distribution: 'zulu'
           java-version: '17'
 
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-version: '8.9'
+      - name: Initialize Web to Android Project
+        run: |
+          mkdir -p www
+          cp -r index.html manifest.json sw.js www/ 2>/dev/null || cp -r * www/ 2>/dev/null || true
+          npm init -y
+          npm install @capacitor/core @capacitor/cli @capacitor/android
+          npx cap init "King Ludo Pro" "com.kingludo.pro" --web-dir="www"
+          npx cap add android
 
-      - name: Build APK
-        run: ./gradlew assembleDebug
+      - name: Build Debug APK
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug
 
-      - name: Save APK
+      - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: KING-LUDO-PRO-APK
-          path: app/build/outputs/apk/debug/app-debug.apk
-          
+          name: king-ludo-pro-apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
