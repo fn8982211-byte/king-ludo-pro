@@ -1,0 +1,10 @@
+{
+  "name": "KING LUDO PRO",
+  "short_name": "KING LUDO",
+  "description": "Play Ludo locally or against computer",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0b1020",
+  "theme_color": "#10172a",
+  "icons": []
+}
